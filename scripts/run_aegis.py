@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from aegis.execution.paper_trader import PaperTrader
 from aegis.feedback.feedback_loop import FeedbackLoop
 from aegis.governance.cro_engine import AccountState, ChiefRiskOfficer, TradeStance
+from aegis.governance.llm_rationale import generate_rationale
 from aegis.logging.trade_logger import LogEntry, TradeLogger
 from aegis.perception.agent_hub_client import AgentHubClient
 from aegis.perception.feature_normalizer import normalize
@@ -49,6 +50,11 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
             daily_pnl_pct=daily_pnl_pct,
         )
         decision = cro.decide(regime_result, account)
+        decision.reason = generate_rationale(
+            regime=regime_result.regime.value, confidence=regime_result.confidence,
+            stance=decision.stance.value, template_reason=decision.reason,
+            daily_pnl_pct=daily_pnl_pct, consecutive_losses=consecutive_losses,
+        )
         activation = selector.select(regime_result.regime, decision)
 
         if decision.stance == TradeStance.PAUSE or not activation.playbooks:

@@ -54,6 +54,18 @@ cp .env.example .env   # optional: fill in Agent Hub / Playbook credentials for 
 
 Without credentials, Aegis runs against deterministic mock data so the full pipeline is runnable out of the box.
 
+### Optional: Qwen-generated CRO rationale
+
+Aegis can use the Bitget Hackathon Qwen API credits to generate the human-readable explanation for each governance decision, instead of (or as a fallback to) the deterministic template. Set in `.env`:
+
+```
+QWEN_BASE_URL=https://hackathon.bitgetops.com/v1
+QWEN_API_KEY=your-key
+QWEN_MODEL=qwen3.6-plus
+```
+
+If the key is unset, the call fails, or it times out, Aegis silently falls back to the deterministic template reason — the governance logic itself never depends on the LLM call succeeding.
+
 ## Usage
 
 Run the main governed paper-trading loop:
