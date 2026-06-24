@@ -1,0 +1,8 @@
+# Global account-level risk limits enforced by the CRO engine regardless of regime/playbook config.
+
+starting_balance: 10000.0
+max_daily_drawdown_pct: 8.0          # pause all trading for the day if breached
+max_consecutive_losses: 3            # reduce risk budget by half after this many losses in a row
+risk_budget_default_pct: 1.0         # % of equity risked per trade under normal conditions
+risk_budget_reduced_pct: 0.4         # % of equity risked per trade in REDUCE mode
+news_shock_pause_minutes: 30         # auto-pause window after a news_shock_flag event

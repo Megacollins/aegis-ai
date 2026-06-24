@@ -1,0 +1,26 @@
+# Maps each regime to permitted Bitget GetAgent Playbooks and base risk caps.
+# position_size_pct / leverage_cap are upper bounds; CRO engine can only tighten, never loosen.
+
+BULLISH:
+  playbooks: ["trend_following_long", "breakout_momentum"]
+  max_position_size_pct: 8.0
+  max_leverage: 5
+  auto_pause_drawdown_pct: 6.0
+
+BEARISH:
+  playbooks: ["trend_following_short", "hedge_short"]
+  max_position_size_pct: 6.0
+  max_leverage: 4
+  auto_pause_drawdown_pct: 5.0
+
+CHOPPY:
+  playbooks: ["mean_reversion_range"]
+  max_position_size_pct: 2.5
+  max_leverage: 2
+  auto_pause_drawdown_pct: 3.0
+
+TRANSITIONING:
+  playbooks: []   # scout-only: no Playbook is trusted while regime is unstable
+  max_position_size_pct: 0.0
+  max_leverage: 1
+  auto_pause_drawdown_pct: 2.0

@@ -1,0 +1,10 @@
+# Thresholds used by RegimeDetector to classify market state.
+# All inputs are normalized to roughly [-1, 1] or [0, 1] by feature_normalizer.py
+
+trend_strength_bull_min: 0.35      # trend_strength above this => bullish bias
+trend_strength_bear_max: -0.35     # trend_strength below this => bearish bias
+volatility_choppy_min: 0.6         # volatility above this with weak trend => choppy
+trend_strength_weak_band: 0.15     # |trend_strength| below this => "weak trend" zone
+sentiment_confirm_weight: 0.2      # how much sentiment can nudge a borderline regime
+news_shock_forces_transitioning: true
+confidence_floor: 0.4              # below this confidence, treat regime as TRANSITIONING
