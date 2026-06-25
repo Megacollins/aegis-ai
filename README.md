@@ -4,6 +4,8 @@
 
 **Bitget AI Hackathon S1 — Trading Agent Track**
 
+🔗 **Live demo: [aegis-chiefriskofficer.vercel.app](https://aegis-chiefriskofficer.vercel.app)** — premium landing page + full data dashboard (`/dashboard.html`) + light theme (`/index-light.html`), all public, no login required.
+
 ## Overview
 
 Most AI trading agents answer "which trade should I take?" Aegis AI answers a more important question first: **"should I be trading right now, with how much capital, and using which strategy?"**
