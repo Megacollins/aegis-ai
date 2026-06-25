@@ -78,6 +78,16 @@ BITGET_PASSPHRASE=your-passphrase
 
 `trend_strength`/`volatility` derive from the 24h ticker (% change and high/low range), `sentiment_score` from the funding rate, `liquidity_score` from quote volume. This is not Bitget's official Agent Hub skill endpoints (those are a CLI/MCP-wrapped layer, not plain REST) — it's the same underlying signal categories pulled directly from Bitget's public market-data API. If a request fails or times out, Aegis logs a visible warning and falls back to mock data for that tick only — the pipeline never blocks waiting on a flaky connection.
 
+### Optional: real GetAgent Playbook catalog
+
+Aegis can ground its Playbook confidence in real backtested evidence instead of a random number, using the GetAgent Playbook catalog (`GET /api/v1/playbook/list`, public, no auth needed for published Playbooks). Set in `.env` to enable the lookup:
+
+```
+PLAYBOOK_API_KEY=your-key
+```
+
+GetAgent's actual trade signals are delivered asynchronously via a Telegram subscription (`enable`/`disable`), which doesn't fit Aegis's synchronous "decide now" model — so this isn't live execution signal delivery. What it does instead: when Aegis selects a local playbook (e.g. `trend_following_long`), it looks up a real published Playbook on the catalog matching the symbol and implied tags, and if one exists with full backtest evidence, uses its real `win_rate` as the confidence. Falls back to a fully mock signal if the catalog is unreachable or has no evidenced match — checked once per run, not once per tick, so a flaky connection doesn't repeatedly stall the loop.
+
 ## Usage
 
 Run the main governed paper-trading loop:
