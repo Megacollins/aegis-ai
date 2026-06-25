@@ -2,5 +2,6 @@ __pycache__/
 *.pyc
 .env
 logs/trades.csv
+state/feedback_state.json
 .venv/
 .claude/

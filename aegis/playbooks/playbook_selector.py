@@ -22,7 +22,7 @@ class PlaybookSelector:
         with open(playbook_mapping_path) as f:
             self.mapping = yaml.safe_load(f)
 
-    def select(self, regime: Regime, decision: GovernanceDecision) -> PlaybookActivation:
+    def select(self, regime: Regime, decision: GovernanceDecision, risk_multiplier: float = 1.0) -> PlaybookActivation:
         if decision.stance == TradeStance.PAUSE:
             return PlaybookActivation(playbooks=[], max_position_size_pct=0.0, max_leverage=1)
 
@@ -30,6 +30,12 @@ class PlaybookSelector:
         size_cap = cfg["max_position_size_pct"]
         if decision.stance == TradeStance.REDUCE:
             size_cap = size_cap * 0.5
+        # The feedback loop's risk_multiplier scales risk_budget_pct (the
+        # numerator in size_position's risk-amount/stop-distance calc), but
+        # that calc is usually dominated by this cap, not the budget --
+        # without scaling the cap too, tightening the budget alone has no
+        # actual effect on position size most of the time.
+        size_cap *= risk_multiplier
 
         return PlaybookActivation(
             playbooks=cfg["playbooks"],

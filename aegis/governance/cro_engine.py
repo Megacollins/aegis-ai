@@ -44,7 +44,7 @@ class ChiefRiskOfficer:
         with open(playbook_mapping_path) as f:
             self.playbook_mapping = yaml.safe_load(f)
 
-    def decide(self, regime_result: RegimeResult, account: AccountState) -> GovernanceDecision:
+    def decide(self, regime_result: RegimeResult, account: AccountState, risk_multiplier: float = 1.0) -> GovernanceDecision:
         limits = self.limits
         regime_cfg = self.playbook_mapping[regime_result.regime.value]
 
@@ -66,19 +66,21 @@ class ChiefRiskOfficer:
                 f"regime TRANSITIONING ({regime_result.reason}) -> PAUSE, no playbook trusted",
             )
 
+        multiplier_note = f" (feedback-adjusted x{risk_multiplier:.2f})" if risk_multiplier != 1.0 else ""
+
         if account.consecutive_losses >= limits["max_consecutive_losses"]:
             return GovernanceDecision(
-                TradeStance.REDUCE, limits["risk_budget_reduced_pct"], max(1, regime_cfg["max_leverage"] // 2),
-                f"{account.consecutive_losses} consecutive losses >= limit {limits['max_consecutive_losses']} -> REDUCE risk budget",
+                TradeStance.REDUCE, limits["risk_budget_reduced_pct"] * risk_multiplier, max(1, regime_cfg["max_leverage"] // 2),
+                f"{account.consecutive_losses} consecutive losses >= limit {limits['max_consecutive_losses']} -> REDUCE risk budget{multiplier_note}",
             )
 
         if regime_result.confidence < 0.6:
             return GovernanceDecision(
-                TradeStance.REDUCE, limits["risk_budget_reduced_pct"], regime_cfg["max_leverage"],
-                f"regime {regime_result.regime.value} confidence {regime_result.confidence:.2f} below 0.6 -> REDUCE",
+                TradeStance.REDUCE, limits["risk_budget_reduced_pct"] * risk_multiplier, regime_cfg["max_leverage"],
+                f"regime {regime_result.regime.value} confidence {regime_result.confidence:.2f} below 0.6 -> REDUCE{multiplier_note}",
             )
 
         return GovernanceDecision(
-            TradeStance.TRADE, limits["risk_budget_default_pct"], regime_cfg["max_leverage"],
-            f"regime {regime_result.regime.value} confidence {regime_result.confidence:.2f}, account healthy -> TRADE at default risk budget",
+            TradeStance.TRADE, limits["risk_budget_default_pct"] * risk_multiplier, regime_cfg["max_leverage"],
+            f"regime {regime_result.regime.value} confidence {regime_result.confidence:.2f}, account healthy -> TRADE at default risk budget{multiplier_note}",
         )

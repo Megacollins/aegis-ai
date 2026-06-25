@@ -24,7 +24,8 @@ from aegis.regime.regime_detector import RegimeDetector
 from aegis.risk.position_sizer import size_position
 
 
-def run(symbol: str, iterations: int, starting_balance: float, mock_price: float, seed: int):
+def run(symbol: str, iterations: int, starting_balance: float, mock_price: float, seed: int,
+        drawdown_alert_pct: float = 5.0, feedback_state_path: str = "state/feedback_state.json"):
     hub_client = AgentHubClient(symbol)
     playbook_client = PlaybookClient(symbol)
     regime_detector = RegimeDetector()
@@ -32,7 +33,7 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
     selector = PlaybookSelector()
     trader = PaperTrader(seed=seed)
     logger = TradeLogger()
-    feedback = FeedbackLoop()
+    feedback = FeedbackLoop(drawdown_alert_pct=drawdown_alert_pct, state_path=feedback_state_path)
 
     balance = starting_balance
     consecutive_losses = 0
@@ -50,13 +51,14 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
             consecutive_losses=consecutive_losses,
             daily_pnl_pct=daily_pnl_pct,
         )
-        decision = cro.decide(regime_result, account)
+        risk_multiplier = feedback.get_multiplier(regime_result.regime.value)
+        decision = cro.decide(regime_result, account, risk_multiplier=risk_multiplier)
         decision.reason = generate_rationale(
             regime=regime_result.regime.value, confidence=regime_result.confidence,
             stance=decision.stance.value, template_reason=decision.reason,
             daily_pnl_pct=daily_pnl_pct, consecutive_losses=consecutive_losses,
         )
-        activation = selector.select(regime_result.regime, decision)
+        activation = selector.select(regime_result.regime, decision, risk_multiplier=risk_multiplier)
 
         if decision.stance == TradeStance.PAUSE or not activation.playbooks:
             logger.log(LogEntry(
@@ -111,10 +113,16 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
 
     logger.close()
 
+    applied = feedback.adjust()
+    feedback.save()
+
     print(f"\nFinal balance: {balance:.2f} (start: {starting_balance:.2f})")
-    print("Feedback suggestions:")
-    for s in feedback.suggestions():
-        print(f"  - {s}")
+    if applied:
+        print("Feedback loop applied (persisted for future runs):")
+        for s in applied:
+            print(f"  - {s}")
+    else:
+        print("Feedback loop: no thresholds breached, no adjustments applied.")
 
 
 if __name__ == "__main__":
@@ -124,6 +132,9 @@ if __name__ == "__main__":
     parser.add_argument("--starting-balance", type=float, default=10000.0)
     parser.add_argument("--mock-price", type=float, default=65000.0)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--drawdown-alert-pct", type=float, default=5.0, help="Feedback loop drawdown threshold per regime")
+    parser.add_argument("--feedback-state", default="state/feedback_state.json", help="Path to persisted feedback multipliers")
     args = parser.parse_args()
 
-    run(args.symbol, args.iterations, args.starting_balance, args.mock_price, args.seed)
+    run(args.symbol, args.iterations, args.starting_balance, args.mock_price, args.seed,
+        args.drawdown_alert_pct, args.feedback_state)

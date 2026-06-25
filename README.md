@@ -88,6 +88,17 @@ PLAYBOOK_API_KEY=your-key
 
 GetAgent's actual trade signals are delivered asynchronously via a Telegram subscription (`enable`/`disable`), which doesn't fit Aegis's synchronous "decide now" model — so this isn't live execution signal delivery. What it does instead: when Aegis selects a local playbook (e.g. `trend_following_long`), it looks up a real published Playbook on the catalog matching the symbol and implied tags, and if one exists with full backtest evidence, uses its real `win_rate` as the confidence. Falls back to a fully mock signal if the catalog is unreachable or has no evidenced match — checked once per run, not once per tick, so a flaky connection doesn't repeatedly stall the loop.
 
+### Closed feedback loop
+
+The feedback loop doesn't just log suggestions — it actually tightens each regime's risk multiplier when its drawdown or win-rate threshold is breached, persists that multiplier to `state/feedback_state.json`, and applies it to both the risk budget *and* the position-size cap on every future run. A regime that blew through its drawdown alert in one run starts the next run already de-risked, and stays de-risked until enough good runs would (in a future version) ease it back. Run twice in a row to see it compound:
+
+```bash
+python scripts/run_aegis.py --iterations 300 --drawdown-alert-pct 1.0
+python scripts/run_aegis.py --iterations 300 --drawdown-alert-pct 1.0   # tightens further from persisted state
+```
+
+Both the risk budget and the position-size cap are scaled by the multiplier — earlier testing caught that scaling only the budget had no real effect, since the cap is usually the binding constraint on position size.
+
 ## Usage
 
 Run the main governed paper-trading loop:
