@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aegis AI — Autonomous Chief Risk Officer for Bitget</title>
+<script>
+  if (localStorage.getItem('aegis-theme') !== 'light') {
+    window.location.replace('index.html');
+  }
+</script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
@@ -63,7 +68,13 @@
       <a href="#proof" class="hover:text-ink transition">Proof of Value</a>
       <a href="#architecture" class="hover:text-ink transition">Architecture</a>
       <a href="dashboard.html" class="hover:text-ink transition">Full Dashboard</a>
-      <a href="index.html" class="hover:text-ink transition">Dark Theme</a>
+      <button id="theme-toggle" type="button" aria-label="Switch to dark theme"
+              class="relative w-12 h-6 rounded-full bg-panel2 border border-border flex items-center px-0.5 transition">
+        <span class="absolute right-0.5 w-5 h-5 rounded-full bg-accent transition-transform"></span>
+        <span class="w-full flex justify-between px-1 text-[10px] relative z-10">
+          <span>🌙</span><span>☀️</span>
+        </span>
+      </button>
     </div>
     <a href="https://github.com/Megacollins/aegis-ai" target="_blank"
        class="text-sm font-medium px-4 py-2 rounded-lg border border-border text-ink hover:border-accent transition">
@@ -397,6 +408,11 @@ function renderTable(trades) {
 }
 
 load();
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  localStorage.setItem('aegis-theme', 'dark');
+  window.location.href = 'index.html';
+});
 </script>
 
 </body>
