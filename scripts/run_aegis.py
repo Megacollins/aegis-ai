@@ -6,6 +6,7 @@ Run: python scripts/run_aegis.py --symbol BTCUSDT --iterations 50
 
 import argparse
 import sys
+from dataclasses import asdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -63,7 +64,7 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
                 confidence=regime_result.confidence, playbook="NONE", stance=decision.stance.value,
                 direction="NONE", entry_price=None, position_size_usd=None, leverage=None,
                 stop_loss=None, take_profit=None, exit_price=None, realized_pnl=None,
-                running_balance=balance, reason=decision.reason,
+                running_balance=balance, reason=decision.reason, features=asdict(features),
             ))
             continue
 
@@ -77,6 +78,7 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
                 direction="NONE", entry_price=None, position_size_usd=None, leverage=None,
                 stop_loss=None, take_profit=None, exit_price=None, realized_pnl=None,
                 running_balance=balance, reason=f"{decision.reason}; playbook {playbook} emitted no signal",
+                features=asdict(features),
             ))
             continue
 
@@ -102,7 +104,7 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
             position_size_usd=order.position_size_usd, leverage=order.leverage,
             stop_loss=order.stop_loss_price, take_profit=order.take_profit_price,
             exit_price=result.exit_price, realized_pnl=result.realized_pnl,
-            running_balance=round(balance, 2), reason=decision.reason,
+            running_balance=round(balance, 2), reason=decision.reason, features=asdict(features),
         ))
         feedback.record(regime_result.regime.value, result.realized_pnl, balance)
         price = result.exit_price

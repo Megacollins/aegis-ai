@@ -76,6 +76,21 @@ python scripts/run_aegis.py --symbol BTCUSDT --iterations 50
 
 Outputs a full trade/decision log to `logs/trades.csv` — every row includes timestamp, regime, Playbook, stance, position parameters, realized PnL, running balance, and the CRO's stated reason for the decision.
 
+### Verifiable decision provenance
+
+Every row also carries a tamper-evident hash chain and a recomputable proof of how the decision was reached:
+
+- `features_json` — the exact regime-detector input features for that tick
+- `config_fingerprint` — hash of the regime/risk config files in effect at the time
+- `input_hash` — hash of (features + config + regime + confidence), proving the logged regime classification actually follows from these inputs
+- `prev_hash` / `row_hash` — a hash chain over the whole log; editing or deleting any row breaks the chain from that point forward
+
+This means a third party doesn't have to trust the CSV file — they can recompute the regime from `features_json` under the fingerprinted config and confirm it matches what was logged, without needing on-chain infrastructure. Verify any log with:
+
+```bash
+python scripts/verify_log.py --log logs/trades.csv
+```
+
 Generate the governed-vs-ungoverned proof-of-value comparison:
 
 ```bash
