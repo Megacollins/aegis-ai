@@ -62,38 +62,34 @@
 </nav>
 
 <!-- HERO -->
-<header class="relative overflow-hidden border-b border-border bg-base text-white py-20">
+<header class="relative overflow-hidden border-b border-border">
   <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.16),transparent_60%)]"></div>
-  <div class="max-w-5xl mx-auto px-6 text-center relative">
-    <span class="inline-block text-xs uppercase tracking-widest text-accent border border-accentdim rounded-full px-3 py-1 mb-8">
-      Bitget AI Hackathon S1 · Trading Agent Track
-    </span>
-
-    <div class="flex justify-center mb-8">
-      <div class="relative">
-        <div class="absolute inset-0 rounded-full bg-accent/10 blur-3xl"></div>
-        <img src="assets/aegis_shield_banner.jpg" alt="Aegis AI Shield" class="relative w-48 h-48 object-contain rounded-2xl glow">
+  <div class="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-12 items-center relative">
+    <div>
+      <span class="inline-block text-xs uppercase tracking-widest text-accent border border-accentdim rounded-full px-3 py-1 mb-6">
+        Bitget AI Hackathon S1 · Trading Agent Track
+      </span>
+      <h1 class="text-4xl md:text-5xl font-semibold leading-tight tracking-tight text-white">
+        The Autonomous <span class="grad-text">Chief Risk Officer</span> for Bitget
+      </h1>
+      <p class="mt-6 text-lg text-muted leading-relaxed max-w-lg">
+        Aegis isn't another signal bot. It's a governance layer that sits above Bitget GetAgent Playbooks —
+        deciding <span class="text-white">when to trade</span>, <span class="text-white">which Playbooks to activate</span>,
+        and <span class="text-white">how much capital to risk</span>, based on real-time market regime.
+      </p>
+      <div class="mt-9 flex flex-wrap gap-4">
+        <a href="#proof" class="px-6 py-3 rounded-lg bg-accent text-white font-medium hover:bg-blue-500 transition">See Proof of Value</a>
+        <a href="https://github.com/Megacollins/aegis-ai" target="_blank" class="px-6 py-3 rounded-lg border border-border text-slate-200 font-medium hover:border-accent transition">Read the Source</a>
+      </div>
+      <div class="mt-10 flex gap-8 text-sm text-muted">
+        <div><div class="text-white font-semibold text-lg" id="hero-stat-dd">—</div>Max Drawdown</div>
+        <div><div class="text-white font-semibold text-lg" id="hero-stat-calmar">—</div>Return / Drawdown</div>
+        <div><div class="text-white font-semibold text-lg">4</div>Market Regimes</div>
       </div>
     </div>
-
-    <h1 class="text-5xl md:text-6xl font-semibold tracking-tight mb-4">Aegis AI</h1>
-    <p class="text-2xl md:text-3xl font-light text-slate-300 mb-4">
-      The Autonomous <span class="grad-text">Chief Risk Officer</span> for Bitget
-    </p>
-    <p class="max-w-2xl mx-auto text-lg text-muted mb-10">
-      Aegis doesn't generate trading signals.<br>
-      It governs Bitget Playbooks — deciding when to trade, which strategies to activate, and how much capital to risk.
-    </p>
-
-    <div class="flex justify-center gap-4 flex-wrap mb-10">
-      <a href="#how" class="px-6 py-3 bg-white text-base font-medium rounded-lg hover:bg-slate-200 transition">See How It Works</a>
-      <a href="#proof" class="px-6 py-3 border border-white/30 hover:bg-white/10 rounded-lg transition">View Live Decision Log</a>
-    </div>
-
-    <div class="flex justify-center gap-10 text-sm text-muted">
-      <div><div class="text-white font-semibold text-lg" id="hero-stat-dd">—</div>Max Drawdown</div>
-      <div><div class="text-white font-semibold text-lg" id="hero-stat-calmar">—</div>Return / Drawdown</div>
-      <div><div class="text-white font-semibold text-lg">4</div>Market Regimes</div>
+    <div class="relative flex justify-center">
+      <div class="absolute w-72 h-72 rounded-full bg-accent/10 blur-3xl"></div>
+      <img src="assets/aegis_shield_banner.jpg" alt="Aegis AI shield" class="relative rounded-2xl glow w-full max-w-md border border-border">
     </div>
   </div>
 </header>
@@ -133,26 +129,72 @@
 
   <!-- HOW IT WORKS -->
   <section id="how" class="py-24 border-b border-border">
-    <h2 class="text-3xl font-semibold mb-8 text-center text-white">How Aegis Works</h2>
+    <span class="text-xs uppercase tracking-widest text-accent">How Aegis Works</span>
+    <h2 class="text-3xl font-semibold text-white mt-3 mb-12">Governance, not signal generation.</h2>
 
-    <div class="bg-panel rounded-2xl p-8 border border-border max-w-3xl mx-auto">
-      <pre class="text-sm md:text-base overflow-x-auto text-slate-200 leading-7"><code>Agent Hub Skills
-   ↓
-Regime Detection
-   (Bullish / Bearish / Choppy / Transitioning)
-   ↓
-Aegis AI — Chief Risk Officer
-   ↓
-Playbook Governance
-   (Approved / Limited / Denied)
-   ↓
-Capital Decision
-   (Deploy Capital / Reduce / Pause)</code></pre>
+    <!-- Stage flow: Perception -> Regime -> Governance -> Playbook Control -> Capital Decision -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div class="rounded-xl border border-border bg-panel p-5">
+        <div class="text-xs text-muted mb-2">01 · Perception</div>
+        <div class="text-white font-medium mb-2">Agent Hub Skills</div>
+        <div class="text-sm text-muted">Macro · Sentiment · On-Chain · Technical · News</div>
+      </div>
+      <div class="rounded-xl border border-border bg-panel p-5">
+        <div class="text-xs text-muted mb-2">02 · Classification</div>
+        <div class="text-white font-medium mb-2">Regime Detection</div>
+        <div class="text-sm text-muted">Bullish · Bearish · Choppy · Transitioning</div>
+      </div>
+      <div class="rounded-xl border-2 border-accent bg-panel2 p-5 glow">
+        <div class="text-xs text-accent mb-2">03 · Governance</div>
+        <div class="text-white font-semibold mb-2">Aegis — Chief Risk Officer</div>
+        <div class="text-sm text-muted">Risk budget, leverage ceiling, stance</div>
+      </div>
+      <div class="rounded-xl border border-amber-500/40 bg-panel p-5">
+        <div class="text-xs text-amber-400 mb-2">04 · Playbook Control</div>
+        <div class="text-white font-medium mb-2">Strategy Approval</div>
+        <div class="text-sm text-muted">Which Bitget Playbooks are permitted</div>
+      </div>
+      <div class="rounded-xl border border-border bg-panel p-5">
+        <div class="text-xs text-muted mb-2">05 · Outcome</div>
+        <div class="text-white font-medium mb-2">Capital Decision</div>
+        <div class="text-sm text-muted">Sized order, reduced size, or no trade</div>
+      </div>
     </div>
 
-    <p class="text-center text-muted mt-4 text-sm max-w-xl mx-auto">
-      Aegis continuously monitors market conditions and governs which Playbooks are allowed to trade.
-    </p>
+    <!-- Connector arrows between stages, desktop only -->
+    <div class="hidden lg:grid grid-cols-5 -mt-2 mb-2 text-accent text-center text-lg select-none" aria-hidden="true">
+      <div></div><div>→</div><div>→</div><div>→</div><div></div>
+    </div>
+
+    <!-- Strategy approval outcomes -->
+    <div class="flex justify-center mt-10 mb-4">
+      <div class="text-muted text-2xl">↓</div>
+    </div>
+    <div class="text-center text-xs uppercase tracking-widest text-muted mb-4">Strategy Approval</div>
+    <div class="grid sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
+      <div class="rounded-lg border border-emerald-500/40 bg-emerald-500/5 text-emerald-400 text-center text-sm font-semibold py-3">APPROVED</div>
+      <div class="rounded-lg border border-amber-500/40 bg-amber-500/5 text-amber-400 text-center text-sm font-semibold py-3">LIMITED</div>
+      <div class="rounded-lg border border-red-500/40 bg-red-500/5 text-red-400 text-center text-sm font-semibold py-3">DENIED</div>
+    </div>
+
+    <!-- Deploy or pause -->
+    <div class="flex justify-center mt-8 mb-4">
+      <div class="text-muted text-2xl">↓</div>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-4">
+      <div class="rounded-xl border border-border bg-panel p-5 text-center">
+        <div class="text-white font-medium mb-1">Deploy Capital</div>
+        <div class="text-sm text-muted">Sized position, volatility-scaled SL/TP</div>
+      </div>
+      <div class="rounded-xl border border-border bg-panel p-5 text-center">
+        <div class="text-white font-medium mb-1">Reduce Exposure</div>
+        <div class="text-sm text-muted">Half-size risk budget on weak confidence</div>
+      </div>
+      <div class="rounded-xl border border-border bg-panel p-5 text-center">
+        <div class="text-white font-medium mb-1">Pause All Trading</div>
+        <div class="text-sm text-muted">Regime untrusted or drawdown breached</div>
+      </div>
+    </div>
   </section>
 
   <!-- FEATURES -->
