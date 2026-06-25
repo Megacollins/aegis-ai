@@ -66,6 +66,18 @@ QWEN_MODEL=qwen3.6-plus
 
 If the key is unset, the call fails, or it times out, Aegis silently falls back to the deterministic template reason — the governance logic itself never depends on the LLM call succeeding.
 
+### Optional: live Bitget market data
+
+Aegis can derive its 5 perception "skills" from real Bitget market data (ticker + funding rate) instead of the mock RNG. Create a **read-only** Bitget API key (Settings → API Management on bitget.com — no trade/withdrawal permissions needed) and set in `.env`:
+
+```
+BITGET_API_KEY=your-key
+BITGET_SECRET_KEY=your-secret
+BITGET_PASSPHRASE=your-passphrase
+```
+
+`trend_strength`/`volatility` derive from the 24h ticker (% change and high/low range), `sentiment_score` from the funding rate, `liquidity_score` from quote volume. This is not Bitget's official Agent Hub skill endpoints (those are a CLI/MCP-wrapped layer, not plain REST) — it's the same underlying signal categories pulled directly from Bitget's public market-data API. If a request fails or times out, Aegis logs a visible warning and falls back to mock data for that tick only — the pipeline never blocks waiting on a flaky connection.
+
 ## Usage
 
 Run the main governed paper-trading loop:

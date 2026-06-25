@@ -12,6 +12,8 @@ from dataclasses import dataclass, field
 
 import requests
 
+from aegis.perception import bitget_market_client
+
 AGENT_HUB_BASE_URL = os.getenv("AGENT_HUB_BASE_URL", "")
 AGENT_HUB_API_KEY = os.getenv("AGENT_HUB_API_KEY", "")
 
@@ -28,24 +30,39 @@ class AgentHubClient:
     def __init__(self, symbol: str):
         self.symbol = symbol
         self.live = bool(AGENT_HUB_BASE_URL and AGENT_HUB_API_KEY)
+        self.bitget_live = bitget_market_client.is_configured()
         self._rng = random.Random(symbol)
 
     def fetch_all(self) -> dict[str, SkillSnapshot]:
-        return {skill: self._fetch_skill(skill) for skill in SKILLS}
+        # Resolve the real-data attempt exactly once per tick -- all 5
+        # "skills" share its outcome, success or fallback, instead of each
+        # independently retrying the same failing call 5x.
+        shared_raw = self._resolve_tick_data()
+        return {skill: SkillSnapshot(skill=skill, raw=shared_raw) for skill in SKILLS}
 
-    def _fetch_skill(self, skill: str) -> SkillSnapshot:
+    def _resolve_tick_data(self) -> dict:
         if self.live:
-            resp = requests.get(
-                f"{AGENT_HUB_BASE_URL}/skills/{skill}",
-                params={"symbol": self.symbol},
-                headers={"Authorization": f"Bearer {AGENT_HUB_API_KEY}"},
-                timeout=10,
-            )
-            resp.raise_for_status()
-            return SkillSnapshot(skill=skill, raw=resp.json())
-        return SkillSnapshot(skill=skill, raw=self._mock_response(skill))
+            # Agent Hub skills can genuinely differ per-skill; only Bitget
+            # live/mock are unified across skills for this MVP.
+            return self._fetch_agent_hub_skill(SKILLS[0])
+        if self.bitget_live:
+            try:
+                return bitget_market_client.fetch_features(self.symbol)
+            except Exception as e:
+                print(f"[AgentHubClient] Bitget live fetch failed ({e!r}), falling back to mock for this tick")
+        return self._mock_response()
 
-    def _mock_response(self, skill: str) -> dict:
+    def _fetch_agent_hub_skill(self, skill: str) -> dict:
+        resp = requests.get(
+            f"{AGENT_HUB_BASE_URL}/skills/{skill}",
+            params={"symbol": self.symbol},
+            headers={"Authorization": f"Bearer {AGENT_HUB_API_KEY}"},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        return resp.json()
+
+    def _mock_response(self) -> dict:
         rng = self._rng
         return {
             "trend_strength": round(rng.uniform(-1, 1), 3),
