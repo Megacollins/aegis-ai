@@ -43,7 +43,16 @@
 <nav class="sticky top-0 z-50 backdrop-blur bg-base/80 border-b border-border">
   <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
     <div class="flex items-center gap-2">
-      <div class="w-7 h-7 rounded bg-accent/20 border border-accent/40 flex items-center justify-center text-accent text-xs font-bold">A</div>
+      <svg viewBox="0 0 24 24" class="w-7 h-7" aria-label="Aegis AI logo">
+        <defs>
+          <linearGradient id="navShieldGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#1e3a6e"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 2L4 5V11C4 16.5 7.2 20.2 12 22C16.8 20.2 20 16.5 20 11V5L12 2Z" fill="url(#navShieldGrad)" stroke="#3b82f6" stroke-width="0.5"/>
+        <path d="M12 7L16 16H13.6L12.8 14H11.2L10.4 16H8L12 7Z" fill="#ffffff"/>
+      </svg>
       <span class="font-semibold text-white tracking-tight">Aegis AI</span>
     </div>
     <div class="hidden md:flex items-center gap-8 text-sm text-muted">
