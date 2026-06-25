@@ -11,13 +11,14 @@
     theme: {
       extend: {
         colors: {
-          base: '#05080f',
-          panel: '#0b1220',
-          panel2: '#0f1a2e',
-          border: '#1c2940',
-          accent: '#3b82f6',
-          accentdim: '#1e3a6e',
-          muted: '#7e93b8',
+          base: '#f7f9fc',
+          panel: '#ffffff',
+          panel2: '#eef3fb',
+          border: '#dde4ef',
+          accent: '#2563eb',
+          accentdim: '#bfdbfe',
+          muted: '#5b6b85',
+          ink: '#0f172a',
         },
         fontFamily: {
           sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'],
@@ -27,65 +28,65 @@
   };
 </script>
 <style>
-  body { background-color: #05080f; }
-  .glow { box-shadow: 0 0 80px rgba(59,130,246,0.25); }
-  .grad-text { background: linear-gradient(90deg, #ffffff 0%, #9dc4ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .card-hover { transition: border-color .2s ease, transform .2s ease; }
-  .card-hover:hover { border-color: #3b82f6; transform: translateY(-2px); }
+  body { background-color: #f7f9fc; }
+  .glow { box-shadow: 0 0 60px rgba(37,99,235,0.12); }
+  .grad-text { background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .card-hover { transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
+  .card-hover:hover { border-color: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.08); }
   table th, table td { white-space: nowrap; }
   ::-webkit-scrollbar { height: 8px; width: 8px; }
-  ::-webkit-scrollbar-thumb { background: #1c2940; border-radius: 8px; }
+  ::-webkit-scrollbar-thumb { background: #dde4ef; border-radius: 8px; }
 </style>
 </head>
-<body class="text-slate-200 font-sans antialiased">
+<body class="text-ink font-sans antialiased">
 
 <!-- NAV -->
-<nav class="sticky top-0 z-50 backdrop-blur bg-base/80 border-b border-border">
+<nav class="sticky top-0 z-50 backdrop-blur bg-white/85 border-b border-border">
   <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
     <div class="flex items-center gap-2">
-      <div class="w-7 h-7 rounded bg-accent/20 border border-accent/40 flex items-center justify-center text-accent text-xs font-bold">A</div>
-      <span class="font-semibold text-white tracking-tight">Aegis AI</span>
+      <div class="w-7 h-7 rounded bg-accent/10 border border-accent/30 flex items-center justify-center text-accent text-xs font-bold">A</div>
+      <span class="font-semibold text-ink tracking-tight">Aegis AI</span>
     </div>
     <div class="hidden md:flex items-center gap-8 text-sm text-muted">
-      <a href="#problem" class="hover:text-white transition">Problem</a>
-      <a href="#how" class="hover:text-white transition">How It Works</a>
-      <a href="#features" class="hover:text-white transition">Features</a>
-      <a href="#proof" class="hover:text-white transition">Proof of Value</a>
-      <a href="#architecture" class="hover:text-white transition">Architecture</a>
-      <a href="dashboard.html" class="hover:text-white transition">Full Dashboard</a>
-      <a href="index-light.html" class="hover:text-white transition">Light Theme</a>
+      <a href="#problem" class="hover:text-ink transition">Problem</a>
+      <a href="#how" class="hover:text-ink transition">How It Works</a>
+      <a href="#features" class="hover:text-ink transition">Features</a>
+      <a href="#proof" class="hover:text-ink transition">Proof of Value</a>
+      <a href="#architecture" class="hover:text-ink transition">Architecture</a>
+      <a href="dashboard.html" class="hover:text-ink transition">Full Dashboard</a>
+      <a href="index.html" class="hover:text-ink transition">Dark Theme</a>
     </div>
     <a href="https://github.com/Megacollins/aegis-ai" target="_blank"
-       class="text-sm font-medium px-4 py-2 rounded-lg border border-border text-slate-200 hover:border-accent hover:text-white transition">
+       class="text-sm font-medium px-4 py-2 rounded-lg border border-border text-ink hover:border-accent transition">
       View on GitHub
     </a>
   </div>
 </nav>
 
 <!-- HERO -->
-<header class="relative overflow-hidden border-b border-border">
-  <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.16),transparent_60%)]"></div>
+<header class="relative overflow-hidden border-b border-border bg-white">
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.08),transparent_60%)]"></div>
   <div class="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-12 items-center relative">
     <div>
-      <span class="inline-block text-xs uppercase tracking-widest text-accent border border-accentdim rounded-full px-3 py-1 mb-6">
+      <span class="inline-block text-xs uppercase tracking-widest text-accent border border-accentdim bg-accent/5 rounded-full px-3 py-1 mb-6">
         Bitget AI Hackathon S1 · Trading Agent Track
       </span>
-      <h1 class="text-4xl md:text-5xl font-semibold leading-tight tracking-tight text-white">
+      <h1 class="text-4xl md:text-5xl font-semibold leading-tight tracking-tight text-ink">
         The Autonomous <span class="grad-text">Chief Risk Officer</span> for Bitget
       </h1>
       <p class="mt-6 text-lg text-muted leading-relaxed max-w-lg">
         Aegis isn't another signal bot. It's a governance layer that sits above Bitget GetAgent Playbooks —
-        deciding <span class="text-white">when to trade</span>, <span class="text-white">which Playbooks to activate</span>,
-        and <span class="text-white">how much capital to risk</span>, based on real-time market regime.
+        deciding <span class="text-ink font-medium">when to trade</span>, <span class="text-ink font-medium">which Playbooks to activate</span>,
+        and <span class="text-ink font-medium">how much capital to risk</span>, based on real-time market regime.
       </p>
       <div class="mt-9 flex flex-wrap gap-4">
-        <a href="#proof" class="px-6 py-3 rounded-lg bg-accent text-white font-medium hover:bg-blue-500 transition">See Proof of Value</a>
-        <a href="https://github.com/Megacollins/aegis-ai" target="_blank" class="px-6 py-3 rounded-lg border border-border text-slate-200 font-medium hover:border-accent transition">Read the Source</a>
+        <a href="#proof" class="px-6 py-3 rounded-lg bg-accent text-white font-medium hover:bg-blue-700 transition">See Proof of Value</a>
+        <a href="https://github.com/Megacollins/aegis-ai" target="_blank" class="px-6 py-3 rounded-lg border border-border text-ink font-medium hover:border-accent transition">Read the Source</a>
       </div>
       <div class="mt-10 flex gap-8 text-sm text-muted">
-        <div><div class="text-white font-semibold text-lg" id="hero-stat-dd">—</div>Max Drawdown</div>
-        <div><div class="text-white font-semibold text-lg" id="hero-stat-calmar">—</div>Return / Drawdown</div>
-        <div><div class="text-white font-semibold text-lg">4</div>Market Regimes</div>
+        <div><div class="text-ink font-semibold text-lg" id="hero-stat-dd">—</div>Max Drawdown</div>
+        <div><div class="text-ink font-semibold text-lg" id="hero-stat-calmar">—</div>Return / Drawdown</div>
+        <div><div class="text-ink font-semibold text-lg">4</div>Market Regimes</div>
       </div>
     </div>
     <div class="relative flex justify-center">
@@ -101,29 +102,29 @@
   <section id="problem" class="py-24 border-b border-border">
     <div class="max-w-3xl">
       <span class="text-xs uppercase tracking-widest text-accent">The Problem</span>
-      <h2 class="text-3xl font-semibold text-white mt-3 mb-6">Every trading agent answers the wrong question.</h2>
+      <h2 class="text-3xl font-semibold text-ink mt-3 mb-6">Every trading agent answers the wrong question.</h2>
       <p class="text-muted text-lg leading-relaxed">
         "Which trade should I take?" is a commodity question — signal generation is well-trodden ground.
         The real failure mode in automated trading isn't a bad signal. It's the absence of governance:
         full-size positions held through choppy or adverse regimes, with no systematic kill-switch.
         Bitget's Playbook ecosystem already supplies strategies. What's missing is a layer that decides
-        whether to trust them <span class="text-white">right now</span>.
+        whether to trust them <span class="text-ink font-medium">right now</span>.
       </p>
     </div>
 
     <!-- Differentiation -->
     <div class="grid sm:grid-cols-3 gap-5 mt-14">
-      <div class="rounded-xl border border-border bg-panel p-6 opacity-70">
+      <div class="rounded-xl border border-border bg-panel p-6">
         <div class="text-xs uppercase tracking-widest text-muted mb-3">Signal Generators</div>
         <p class="text-sm text-muted">Pick the trade. Answer "what should I buy?" — no opinion on whether trading should happen at all.</p>
       </div>
-      <div class="rounded-xl border border-border bg-panel p-6 opacity-70">
+      <div class="rounded-xl border border-border bg-panel p-6">
         <div class="text-xs uppercase tracking-widest text-muted mb-3">Signal Filters &amp; Benchmarks</div>
         <p class="text-sm text-muted">Score or rank signals after the fact. Improve signal quality, but still defer to the agent on capital and timing.</p>
       </div>
       <div class="rounded-xl border-2 border-accent bg-panel2 p-6 glow">
         <div class="text-xs uppercase tracking-widest text-accent mb-3">Aegis — Governance Layer</div>
-        <p class="text-sm text-slate-200">Sits above all of it. Decides whether to trade, which Playbooks are trusted, and how much capital to risk — before any signal matters.</p>
+        <p class="text-sm text-ink">Sits above all of it. Decides whether to trade, which Playbooks are trusted, and how much capital to risk — before any signal matters.</p>
       </div>
     </div>
   </section>
@@ -131,33 +132,33 @@
   <!-- HOW IT WORKS -->
   <section id="how" class="py-24 border-b border-border">
     <span class="text-xs uppercase tracking-widest text-accent">How Aegis Works</span>
-    <h2 class="text-3xl font-semibold text-white mt-3 mb-12">Governance, not signal generation.</h2>
+    <h2 class="text-3xl font-semibold text-ink mt-3 mb-12">Governance, not signal generation.</h2>
 
     <!-- Stage flow: Perception -> Regime -> Governance -> Playbook Control -> Capital Decision -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       <div class="rounded-xl border border-border bg-panel p-5">
         <div class="text-xs text-muted mb-2">01 · Perception</div>
-        <div class="text-white font-medium mb-2">Agent Hub Skills</div>
+        <div class="text-ink font-medium mb-2">Agent Hub Skills</div>
         <div class="text-sm text-muted">Macro · Sentiment · On-Chain · Technical · News</div>
       </div>
       <div class="rounded-xl border border-border bg-panel p-5">
         <div class="text-xs text-muted mb-2">02 · Classification</div>
-        <div class="text-white font-medium mb-2">Regime Detection</div>
+        <div class="text-ink font-medium mb-2">Regime Detection</div>
         <div class="text-sm text-muted">Bullish · Bearish · Choppy · Transitioning</div>
       </div>
       <div class="rounded-xl border-2 border-accent bg-panel2 p-5 glow">
         <div class="text-xs text-accent mb-2">03 · Governance</div>
-        <div class="text-white font-semibold mb-2">Aegis — Chief Risk Officer</div>
+        <div class="text-ink font-semibold mb-2">Aegis — Chief Risk Officer</div>
         <div class="text-sm text-muted">Risk budget, leverage ceiling, stance</div>
       </div>
-      <div class="rounded-xl border border-amber-500/40 bg-panel p-5">
-        <div class="text-xs text-amber-400 mb-2">04 · Playbook Control</div>
-        <div class="text-white font-medium mb-2">Strategy Approval</div>
+      <div class="rounded-xl border border-amber-400 bg-amber-50 p-5">
+        <div class="text-xs text-amber-600 mb-2">04 · Playbook Control</div>
+        <div class="text-ink font-medium mb-2">Strategy Approval</div>
         <div class="text-sm text-muted">Which Bitget Playbooks are permitted</div>
       </div>
       <div class="rounded-xl border border-border bg-panel p-5">
         <div class="text-xs text-muted mb-2">05 · Outcome</div>
-        <div class="text-white font-medium mb-2">Capital Decision</div>
+        <div class="text-ink font-medium mb-2">Capital Decision</div>
         <div class="text-sm text-muted">Sized order, reduced size, or no trade</div>
       </div>
     </div>
@@ -173,9 +174,9 @@
     </div>
     <div class="text-center text-xs uppercase tracking-widest text-muted mb-4">Strategy Approval</div>
     <div class="grid sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
-      <div class="rounded-lg border border-emerald-500/40 bg-emerald-500/5 text-emerald-400 text-center text-sm font-semibold py-3">APPROVED</div>
-      <div class="rounded-lg border border-amber-500/40 bg-amber-500/5 text-amber-400 text-center text-sm font-semibold py-3">LIMITED</div>
-      <div class="rounded-lg border border-red-500/40 bg-red-500/5 text-red-400 text-center text-sm font-semibold py-3">DENIED</div>
+      <div class="rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-700 text-center text-sm font-semibold py-3">APPROVED</div>
+      <div class="rounded-lg border border-amber-300 bg-amber-50 text-amber-700 text-center text-sm font-semibold py-3">LIMITED</div>
+      <div class="rounded-lg border border-red-300 bg-red-50 text-red-700 text-center text-sm font-semibold py-3">DENIED</div>
     </div>
 
     <!-- Deploy or pause -->
@@ -184,15 +185,15 @@
     </div>
     <div class="grid sm:grid-cols-3 gap-4">
       <div class="rounded-xl border border-border bg-panel p-5 text-center">
-        <div class="text-white font-medium mb-1">Deploy Capital</div>
+        <div class="text-ink font-medium mb-1">Deploy Capital</div>
         <div class="text-sm text-muted">Sized position, volatility-scaled SL/TP</div>
       </div>
       <div class="rounded-xl border border-border bg-panel p-5 text-center">
-        <div class="text-white font-medium mb-1">Reduce Exposure</div>
+        <div class="text-ink font-medium mb-1">Reduce Exposure</div>
         <div class="text-sm text-muted">Half-size risk budget on weak confidence</div>
       </div>
       <div class="rounded-xl border border-border bg-panel p-5 text-center">
-        <div class="text-white font-medium mb-1">Pause All Trading</div>
+        <div class="text-ink font-medium mb-1">Pause All Trading</div>
         <div class="text-sm text-muted">Regime untrusted or drawdown breached</div>
       </div>
     </div>
@@ -201,36 +202,36 @@
   <!-- FEATURES -->
   <section id="features" class="py-24 border-b border-border">
     <span class="text-xs uppercase tracking-widest text-accent">Key Features</span>
-    <h2 class="text-3xl font-semibold text-white mt-3 mb-12">A governance layer, not a guess.</h2>
+    <h2 class="text-3xl font-semibold text-ink mt-3 mb-12">A governance layer, not a guess.</h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
       <div class="rounded-xl border border-border bg-panel p-6 card-hover">
         <div class="text-accent text-2xl mb-3">◆</div>
-        <h3 class="text-white font-medium mb-2">Regime Detection</h3>
+        <h3 class="text-ink font-medium mb-2">Regime Detection</h3>
         <p class="text-sm text-muted">Classifies markets into four regimes from live Agent Hub signals and adjusts risk policy before any trade is considered.</p>
       </div>
       <div class="rounded-xl border border-border bg-panel p-6 card-hover">
         <div class="text-accent text-2xl mb-3">◆</div>
-        <h3 class="text-white font-medium mb-2">Playbook Governance</h3>
+        <h3 class="text-ink font-medium mb-2">Playbook Governance</h3>
         <p class="text-sm text-muted">Plugs into existing Bitget GetAgent Playbooks unmodified — Aegis decides which are trusted, it never replaces a strategy.</p>
       </div>
       <div class="rounded-xl border border-border bg-panel p-6 card-hover">
         <div class="text-accent text-2xl mb-3">◆</div>
-        <h3 class="text-white font-medium mb-2">Risk Budgeting</h3>
+        <h3 class="text-ink font-medium mb-2">Risk Budgeting</h3>
         <p class="text-sm text-muted">Sets a global risk budget and leverage ceiling per regime, tightened automatically on drawdown or losing streaks.</p>
       </div>
       <div class="rounded-xl border border-border bg-panel p-6 card-hover">
         <div class="text-accent text-2xl mb-3">◆</div>
-        <h3 class="text-white font-medium mb-2">Position Sizing</h3>
+        <h3 class="text-ink font-medium mb-2">Position Sizing</h3>
         <p class="text-sm text-muted">Position size, leverage, and stop distance all derive from live volatility, not a static rule.</p>
       </div>
       <div class="rounded-xl border border-border bg-panel p-6 card-hover">
         <div class="text-accent text-2xl mb-3">◆</div>
-        <h3 class="text-white font-medium mb-2">Decision Logging</h3>
+        <h3 class="text-ink font-medium mb-2">Decision Logging</h3>
         <p class="text-sm text-muted">Every decision — including refusing to trade — is written to an auditable log with a named threshold and a stated reason.</p>
       </div>
       <div class="rounded-xl border border-border bg-panel p-6 card-hover">
         <div class="text-accent text-2xl mb-3">◆</div>
-        <h3 class="text-white font-medium mb-2">Feedback Loop</h3>
+        <h3 class="text-ink font-medium mb-2">Feedback Loop</h3>
         <p class="text-sm text-muted">Tracks rolling win rate and drawdown per regime, surfacing threshold-adjustment suggestions over time.</p>
       </div>
     </div>
@@ -239,7 +240,7 @@
   <!-- PROOF OF VALUE -->
   <section id="proof" class="py-24 border-b border-border">
     <span class="text-xs uppercase tracking-widest text-accent">Proof of Value</span>
-    <h2 class="text-3xl font-semibold text-white mt-3 mb-3">Same market path. Two outcomes.</h2>
+    <h2 class="text-3xl font-semibold text-ink mt-3 mb-3">Same market path. Two outcomes.</h2>
     <p class="text-muted max-w-2xl mb-10">
       Aegis-governed and ungoverned execution of identical Bitget Playbooks, run over the same simulated price path.
       Aegis trades less and accepts a lower raw return in exchange for materially better risk-adjusted performance.
@@ -247,15 +248,15 @@
 
     <div class="grid md:grid-cols-3 gap-5 mb-10" id="metric-cards"></div>
 
-    <div class="rounded-xl border border-border bg-panel p-6 mb-10">
+    <div class="rounded-xl border border-border bg-panel p-6 mb-10 shadow-sm">
       <canvas id="equityChart" height="90"></canvas>
     </div>
 
-    <h3 class="text-white font-medium mb-4">Live Decision Log</h3>
+    <h3 class="text-ink font-medium mb-4">Live Decision Log</h3>
     <p class="text-sm text-muted mb-4">Every row is a real Aegis decision, including PAUSE rows where Aegis refused to trade. Sampled from a 300-iteration run.</p>
-    <div class="rounded-xl border border-border bg-panel overflow-x-auto max-h-[420px] overflow-y-auto">
+    <div class="rounded-xl border border-border bg-panel overflow-x-auto max-h-[420px] overflow-y-auto shadow-sm">
       <table class="w-full text-sm">
-        <thead class="sticky top-0 bg-panel text-muted">
+        <thead class="sticky top-0 bg-panel text-muted border-b border-border">
           <tr>
             <th class="text-left px-4 py-3">Time</th><th class="text-left px-4 py-3">Regime</th>
             <th class="text-left px-4 py-3">Stance</th><th class="text-left px-4 py-3">Playbook</th>
@@ -272,8 +273,8 @@
   <!-- ARCHITECTURE -->
   <section id="architecture" class="py-24">
     <span class="text-xs uppercase tracking-widest text-accent">Architecture</span>
-    <h2 class="text-3xl font-semibold text-white mt-3 mb-10">Built to be inspected, not trusted blindly.</h2>
-    <div class="rounded-xl border border-border bg-panel p-8 font-mono text-sm text-muted leading-7 overflow-x-auto">
+    <h2 class="text-3xl font-semibold text-ink mt-3 mb-10">Built to be inspected, not trusted blindly.</h2>
+    <div class="rounded-xl border border-border bg-panel p-8 font-mono text-sm text-muted leading-7 overflow-x-auto shadow-sm">
 <pre>Agent Hub Skills (macro, market-intel, sentiment, technical, news)
         │
         ▼
@@ -292,14 +293,14 @@ Risk Allocation      (volatility-scaled stop-loss / take-profit)
 Paper Trading Execution  →  Trade Logger (CSV)  →  Feedback Loop</pre>
     </div>
     <div class="flex flex-wrap gap-4 mt-10">
-      <a href="https://github.com/Megacollins/aegis-ai" target="_blank" class="px-6 py-3 rounded-lg bg-accent text-white font-medium hover:bg-blue-500 transition">View Source on GitHub</a>
-      <a href="https://github.com/Megacollins/aegis-ai/blob/master/docs/architecture.md" target="_blank" class="px-6 py-3 rounded-lg border border-border text-slate-200 font-medium hover:border-accent transition">Architecture Docs</a>
+      <a href="https://github.com/Megacollins/aegis-ai" target="_blank" class="px-6 py-3 rounded-lg bg-accent text-white font-medium hover:bg-blue-700 transition">View Source on GitHub</a>
+      <a href="https://github.com/Megacollins/aegis-ai/blob/master/docs/architecture.md" target="_blank" class="px-6 py-3 rounded-lg border border-border text-ink font-medium hover:border-accent transition">Architecture Docs</a>
     </div>
   </section>
 
 </main>
 
-<footer class="border-t border-border py-10 text-center text-sm text-muted">
+<footer class="border-t border-border py-10 text-center text-sm text-muted bg-white">
   Aegis AI · Built for Bitget AI Hackathon S1 · All trading shown is paper/simulated, no real funds at risk ·
   <a href="https://github.com/Megacollins/aegis-ai" target="_blank" class="text-accent">github.com/Megacollins/aegis-ai</a>
 </footer>
@@ -333,7 +334,7 @@ function renderMetrics(cmp) {
     { label: 'Return / Drawdown', a: calmar(g) + 'x', b: calmar(u) + 'x' },
   ];
   document.getElementById('metric-cards').innerHTML = cards.map(c => `
-    <div class="rounded-xl border border-border bg-panel p-6 text-center">
+    <div class="rounded-xl border border-border bg-panel p-6 text-center shadow-sm">
       <div class="text-xs uppercase tracking-widest text-muted mb-4">${c.label}</div>
       <div class="flex justify-center gap-10">
         <div><div class="text-2xl font-semibold text-accent">${c.a}</div><div class="text-xs text-muted mt-1">Aegis-Governed</div></div>
@@ -350,17 +351,17 @@ function renderChart(cmp) {
     data: {
       labels,
       datasets: [
-        { label: 'Aegis-Governed', data: cmp.governed.equity_curve, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.08)', fill: true, tension: 0.25, pointRadius: 0, borderWidth: 2 },
-        { label: 'Ungoverned Baseline', data: cmp.ungoverned.equity_curve, borderColor: '#7e93b8', backgroundColor: 'rgba(126,147,184,0.05)', fill: true, tension: 0.25, pointRadius: 0, borderWidth: 2 },
+        { label: 'Aegis-Governed', data: cmp.governed.equity_curve, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.08)', fill: true, tension: 0.25, pointRadius: 0, borderWidth: 2 },
+        { label: 'Ungoverned Baseline', data: cmp.ungoverned.equity_curve, borderColor: '#94a3b8', backgroundColor: 'rgba(148,163,184,0.06)', fill: true, tension: 0.25, pointRadius: 0, borderWidth: 2 },
       ],
     },
     options: {
       responsive: true,
       interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { labels: { color: '#cbd5e1' } } },
+      plugins: { legend: { labels: { color: '#334155' } } },
       scales: {
-        x: { ticks: { color: '#7e93b8' }, grid: { color: 'rgba(255,255,255,0.04)' } },
-        y: { ticks: { color: '#7e93b8' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        x: { ticks: { color: '#5b6b85' }, grid: { color: 'rgba(15,23,42,0.05)' } },
+        y: { ticks: { color: '#5b6b85' }, grid: { color: 'rgba(15,23,42,0.05)' } },
       },
     },
   });
@@ -369,13 +370,13 @@ function renderChart(cmp) {
 function renderTable(trades) {
   const rows = trades.slice(0, 60).map(t => {
     const pnl = parseFloat(t.realized_pnl);
-    const pnlClass = isNaN(pnl) ? 'text-muted' : (pnl >= 0 ? 'text-emerald-400' : 'text-red-400');
+    const pnlClass = isNaN(pnl) ? 'text-muted' : (pnl >= 0 ? 'text-emerald-600' : 'text-red-600');
     const pnlText = isNaN(pnl) ? '—' : pnl.toFixed(2);
     const stancePill = {
-      TRADE: 'bg-emerald-500/10 text-emerald-400',
-      PAUSE: 'bg-red-500/10 text-red-400',
-      REDUCE: 'bg-amber-500/10 text-amber-400',
-    }[t.stance] || 'bg-slate-500/10 text-slate-400';
+      TRADE: 'bg-emerald-50 text-emerald-700',
+      PAUSE: 'bg-red-50 text-red-700',
+      REDUCE: 'bg-amber-50 text-amber-700',
+    }[t.stance] || 'bg-slate-100 text-slate-600';
     return `<tr>
       <td class="px-4 py-3 text-muted">${t.timestamp.slice(11, 19)}</td>
       <td class="px-4 py-3">${t.regime}</td>
