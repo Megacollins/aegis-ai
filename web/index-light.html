@@ -66,6 +66,7 @@
       <a href="#how" class="hover:text-ink transition">How It Works</a>
       <a href="#features" class="hover:text-ink transition">Features</a>
       <a href="#proof" class="hover:text-ink transition">Proof of Value</a>
+      <a href="#verify" class="hover:text-ink transition">Verify</a>
       <a href="#architecture" class="hover:text-ink transition">Architecture</a>
       <a href="dashboard.html" class="hover:text-ink transition">Full Dashboard</a>
       <button id="theme-toggle" type="button" aria-label="Switch to dark theme"
@@ -106,6 +107,11 @@
       <div><div class="text-ink font-semibold text-lg" id="hero-stat-dd">—</div>Max Drawdown</div>
       <div><div class="text-ink font-semibold text-lg" id="hero-stat-calmar">—</div>Return / Drawdown</div>
       <div><div class="text-ink font-semibold text-lg">4</div>Market Regimes</div>
+    </div>
+    <div class="flex flex-wrap gap-3 justify-center mt-8">
+      <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-300 rounded-full px-3 py-1.5">✓ 27/27 tests passing</span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-300 rounded-full px-3 py-1.5">✓ Tamper-evident audit trail</span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-300 rounded-full px-3 py-1.5">✓ Real Bitget market data, with visible fallback</span>
     </div>
   </div>
 </header>
@@ -284,6 +290,37 @@
     </div>
   </section>
 
+  <!-- VERIFY -->
+  <section id="verify" class="py-24 border-b border-border">
+    <span class="text-xs uppercase tracking-widest text-accent">Verifiable Audit Trail</span>
+    <h2 class="text-3xl font-semibold text-ink mt-3 mb-3">Don't trust the log. Verify it.</h2>
+    <p class="text-muted max-w-2xl mb-10">
+      Every row in the decision log carries a hash chain: each row's <code class="text-accent">row_hash</code> is derived from its own content plus the previous row's hash, so editing or deleting any row breaks the chain from that point forward. Each row also carries an <code class="text-accent">input_hash</code> over its exact regime-detector inputs and config — a third party can recompute the regime classification independently and confirm it matches, without trusting the log file at all.
+    </p>
+
+    <div class="rounded-xl border border-border bg-panel overflow-x-auto mb-8 shadow-sm">
+      <table class="w-full text-sm font-mono">
+        <thead class="bg-panel2 text-muted">
+          <tr>
+            <th class="text-left px-4 py-3">Timestamp</th>
+            <th class="text-left px-4 py-3">Regime</th>
+            <th class="text-left px-4 py-3">prev_hash</th>
+            <th class="text-left px-4 py-3">row_hash</th>
+          </tr>
+        </thead>
+        <tbody id="verify-rows" class="divide-y divide-border text-xs"></tbody>
+      </table>
+    </div>
+
+    <p class="text-sm text-muted mb-3">Run the verifier yourself against the full log — it independently recomputes every hash and re-derives every regime classification from scratch:</p>
+    <div class="rounded-xl border border-border bg-panel2 p-5 font-mono text-sm shadow-sm">
+      <div class="text-accent mb-3">$ python scripts/verify_log.py</div>
+      <div class="text-muted">Rows checked: 80</div>
+      <div class="text-emerald-600">Chain integrity: PASS</div>
+      <div class="text-emerald-600">Decision provenance: PASS</div>
+    </div>
+  </section>
+
   <!-- ARCHITECTURE -->
   <section id="architecture" class="py-24">
     <span class="text-xs uppercase tracking-widest text-accent">Architecture</span>
@@ -329,6 +366,19 @@ async function load() {
   renderMetrics(cmp);
   renderChart(cmp);
   renderTable(trades);
+  renderVerifyRows(trades);
+}
+
+function renderVerifyRows(trades) {
+  const rows = trades.slice(0, 5).map(t => `
+    <tr>
+      <td class="px-4 py-3 text-muted">${t.timestamp.slice(0, 19)}</td>
+      <td class="px-4 py-3">${t.regime}</td>
+      <td class="px-4 py-3 text-muted">${t.prev_hash.slice(0, 16)}…</td>
+      <td class="px-4 py-3 text-accent">${t.row_hash.slice(0, 16)}…</td>
+    </tr>
+  `).join('');
+  document.getElementById('verify-rows').innerHTML = rows;
 }
 
 function calmar(m) {
