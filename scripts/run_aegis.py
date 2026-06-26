@@ -5,6 +5,7 @@ Run: python scripts/run_aegis.py --symbol BTCUSDT --iterations 50
 """
 
 import argparse
+import json
 import sys
 from dataclasses import asdict
 from pathlib import Path
@@ -25,9 +26,11 @@ from aegis.risk.position_sizer import size_position
 
 
 def run(symbol: str, iterations: int, starting_balance: float, mock_price: float, seed: int,
-        drawdown_alert_pct: float = 5.0, feedback_state_path: str = "state/feedback_state.json"):
+        drawdown_alert_pct: float = 5.0, feedback_state_path: str = "state/feedback_state.json",
+        status_output_path: str | None = "web/data/status.json"):
     hub_client = AgentHubClient(symbol)
     playbook_client = PlaybookClient(symbol)
+    playbook_signal_sources = {"mock": 0, "getagent_catalog": 0, "agent_hub_live": 0}
     regime_detector = RegimeDetector()
     cro = ChiefRiskOfficer()
     selector = PlaybookSelector()
@@ -72,6 +75,7 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
 
         playbook = activation.playbooks[0]
         signal = playbook_client.get_signal(playbook)
+        playbook_signal_sources[signal.source] += 1
 
         if signal.direction == "NONE":
             logger.log(LogEntry(
@@ -124,6 +128,25 @@ def run(symbol: str, iterations: int, starting_balance: float, mock_price: float
     else:
         print("Feedback loop: no thresholds breached, no adjustments applied.")
 
+    status = {
+        "generated_at": TradeLogger.now(),
+        "market_data": {
+            "configured": hub_client.bitget_live or hub_client.live,
+            "live_fetch_count": hub_client.live_fetch_count,
+            "mock_fallback_count": hub_client.mock_fallback_count,
+        },
+        "playbook_catalog": {
+            "configured": playbook_client.catalog_live or playbook_client.live,
+            "live_count": playbook_signal_sources["getagent_catalog"] + playbook_signal_sources["agent_hub_live"],
+            "mock_count": playbook_signal_sources["mock"],
+        },
+    }
+    print(f"\nData source status: {status}")
+    if status_output_path:
+        Path(status_output_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(status_output_path, "w") as f:
+            json.dump(status, f, indent=2)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -134,7 +157,8 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--drawdown-alert-pct", type=float, default=5.0, help="Feedback loop drawdown threshold per regime")
     parser.add_argument("--feedback-state", default="state/feedback_state.json", help="Path to persisted feedback multipliers")
+    parser.add_argument("--status-output", default="web/data/status.json", help="Path to write data-source live/mock status JSON")
     args = parser.parse_args()
 
     run(args.symbol, args.iterations, args.starting_balance, args.mock_price, args.seed,
-        args.drawdown_alert_pct, args.feedback_state)
+        args.drawdown_alert_pct, args.feedback_state, args.status_output)

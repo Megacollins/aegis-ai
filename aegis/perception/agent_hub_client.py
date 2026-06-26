@@ -32,6 +32,8 @@ class AgentHubClient:
         self.live = bool(AGENT_HUB_BASE_URL and AGENT_HUB_API_KEY)
         self.bitget_live = bitget_market_client.is_configured()
         self._rng = random.Random(symbol)
+        self.live_fetch_count = 0
+        self.mock_fallback_count = 0
 
     def fetch_all(self) -> dict[str, SkillSnapshot]:
         # Resolve the real-data attempt exactly once per tick -- all 5
@@ -44,12 +46,17 @@ class AgentHubClient:
         if self.live:
             # Agent Hub skills can genuinely differ per-skill; only Bitget
             # live/mock are unified across skills for this MVP.
-            return self._fetch_agent_hub_skill(SKILLS[0])
+            data = self._fetch_agent_hub_skill(SKILLS[0])
+            self.live_fetch_count += 1
+            return data
         if self.bitget_live:
             try:
-                return bitget_market_client.fetch_features(self.symbol)
+                data = bitget_market_client.fetch_features(self.symbol)
+                self.live_fetch_count += 1
+                return data
             except Exception as e:
                 print(f"[AgentHubClient] Bitget live fetch failed ({e!r}), falling back to mock for this tick")
+        self.mock_fallback_count += 1
         return self._mock_response()
 
     def _fetch_agent_hub_skill(self, skill: str) -> dict:

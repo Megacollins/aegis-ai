@@ -129,6 +129,7 @@
   <h1>Aegis <span>AI</span></h1>
   <p class="subtitle">The Autonomous Chief Risk Officer for Bitget — governs Bitget GetAgent Playbooks instead of generating new signals.</p>
   <span class="badge">Bitget AI Hackathon S1 · Trading Agent Track</span>
+  <div id="data-status-badges" style="display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap;"></div>
 </header>
 
 <main>
@@ -216,6 +217,35 @@ async function load() {
   renderMetrics(cmp);
   renderChart(cmp);
   renderTable(trades);
+  renderDataStatus();
+}
+
+async function renderDataStatus() {
+  let status;
+  try {
+    status = await fetch('data/status.json').then(r => r.json());
+  } catch (e) {
+    return; // status.json is optional; older data exports won't have it
+  }
+
+  const badge = (label, configured, liveCount, totalCount) => {
+    let state, color;
+    if (!configured) {
+      state = 'Not configured (mock data)'; color = '#8aa3c4';
+    } else if (liveCount > 0) {
+      state = `Live (${liveCount}/${totalCount} ticks)`; color = '#3ddc97';
+    } else {
+      state = `Configured, falling back to mock (${totalCount}/${totalCount} ticks)`; color = '#ffc43d';
+    }
+    return `<span style="font-size:0.78rem; padding:4px 12px; border-radius:999px; border:1px solid ${color}55; color:${color}; background:${color}15;">
+      ${label}: ${state}
+    </span>`;
+  };
+
+  const m = status.market_data, p = status.playbook_catalog;
+  document.getElementById('data-status-badges').innerHTML =
+    badge('Bitget Market Data', m.configured, m.live_fetch_count, m.live_fetch_count + m.mock_fallback_count) +
+    badge('GetAgent Playbook Catalog', p.configured, p.live_count, p.live_count + p.mock_count);
 }
 
 function renderMetrics(cmp) {
