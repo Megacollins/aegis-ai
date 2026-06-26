@@ -67,6 +67,7 @@
       <a href="#features" class="hover:text-ink transition">Features</a>
       <a href="#proof" class="hover:text-ink transition">Proof of Value</a>
       <a href="#verify" class="hover:text-ink transition">Verify</a>
+      <a href="#readiness" class="hover:text-ink transition">Built</a>
       <a href="#architecture" class="hover:text-ink transition">Architecture</a>
       <a href="dashboard.html" class="hover:text-ink transition">Full Dashboard</a>
       <button id="theme-toggle" type="button" aria-label="Switch to dark theme"
@@ -266,7 +267,7 @@
       Aegis trades less and accepts a lower raw return in exchange for materially better risk-adjusted performance.
     </p>
 
-    <div class="grid md:grid-cols-3 gap-5 mb-10" id="metric-cards"></div>
+    <div class="grid md:grid-cols-5 gap-5 mb-10" id="metric-cards"></div>
 
     <div class="rounded-xl border border-border bg-panel p-6 mb-10 shadow-sm">
       <canvas id="equityChart" height="90"></canvas>
@@ -321,6 +322,14 @@
     </div>
   </section>
 
+  <!-- READINESS -->
+  <section id="readiness" class="py-14 border-b border-border">
+    <span class="text-xs uppercase tracking-widest text-accent">Built &amp; Verified</span>
+    <h2 class="text-3xl font-semibold text-ink mt-3 mb-3">Every component, inspectable.</h2>
+    <p class="text-muted max-w-2xl mb-10">Not a pitch deck — every box below is real code, with tests, in the repo linked above.</p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" id="readiness-checklist"></div>
+  </section>
+
   <!-- ARCHITECTURE -->
   <section id="architecture" class="py-14">
     <span class="text-xs uppercase tracking-widest text-accent">Architecture</span>
@@ -372,10 +381,39 @@ async function load() {
     fetch('data/trades.json').then(r => r.json()),
   ]);
   renderHeroStats(cmp);
-  renderMetrics(cmp);
+  renderMetrics(cmp, trades);
   renderChart(cmp);
   renderTable(trades);
   renderVerifyRows(trades);
+  renderReadinessChecklist();
+}
+
+function computeWinStats(trades) {
+  const closed = trades.filter(t => t.realized_pnl !== '' && t.realized_pnl !== null && t.realized_pnl !== undefined);
+  const wins = closed.filter(t => parseFloat(t.realized_pnl) > 0).length;
+  return { winRate: closed.length ? Math.round((wins / closed.length) * 100) : 0, tradeCount: closed.length };
+}
+
+function renderReadinessChecklist() {
+  const items = [
+    { tag: 'PERCEPTION', title: 'Regime Detection', desc: 'Rule-based classifier over 5 Agent Hub signals — every call traces to a named threshold.' },
+    { tag: 'GOVERNANCE', title: 'Chief Risk Officer Engine', desc: 'TRADE / REDUCE / PAUSE decisions with risk budget + leverage cap, unit tested.' },
+    { tag: 'SELECTION', title: 'Playbook Selector', desc: 'Grounds confidence in real GetAgent catalog win-rate when reachable.' },
+    { tag: 'SIZING', title: 'Position Sizer', desc: 'Volatility-scaled stop-loss/take-profit, risk-budget-capped position size.' },
+    { tag: 'AUDIT', title: 'Hash-Chained Trade Logger', desc: 'Every row tamper-evident and independently re-derivable from its inputs.' },
+    { tag: 'LEARNING', title: 'Closed Feedback Loop', desc: 'Persisted per-regime risk multipliers that tighten across runs, not just within one.' },
+  ];
+  const html = items.map(i => `
+    <div class="rounded-xl border border-border bg-panel p-5 shadow-sm">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs text-muted uppercase tracking-widest">${i.tag}</span>
+        <span class="text-xs font-semibold text-emerald-600">✓ READY</span>
+      </div>
+      <div class="text-ink font-medium mb-1">${i.title}</div>
+      <p class="text-sm text-muted">${i.desc}</p>
+    </div>
+  `).join('');
+  document.getElementById('readiness-checklist').innerHTML = html;
 }
 
 function renderVerifyRows(trades) {
@@ -399,20 +437,26 @@ function renderHeroStats(cmp) {
   document.getElementById('hero-stat-calmar').textContent = calmar(cmp.governed) + 'x';
 }
 
-function renderMetrics(cmp) {
+function renderMetrics(cmp, trades) {
   const g = cmp.governed, u = cmp.ungoverned;
+  const win = computeWinStats(trades);
   const cards = [
     { label: 'Return', a: g.return_pct + '%', b: u.return_pct + '%' },
     { label: 'Max Drawdown', a: g.max_drawdown_pct + '%', b: u.max_drawdown_pct + '%' },
     { label: 'Return / Drawdown', a: calmar(g) + 'x', b: calmar(u) + 'x' },
+    { label: 'Win Rate', a: win.winRate + '%', b: '—' },
+    { label: 'Trades Logged', a: win.tradeCount, b: '—' },
   ];
   document.getElementById('metric-cards').innerHTML = cards.map(c => `
     <div class="rounded-xl border border-border bg-panel p-6 text-center shadow-sm">
       <div class="text-xs uppercase tracking-widest text-muted mb-4">${c.label}</div>
-      <div class="flex justify-center gap-10">
-        <div><div class="text-2xl font-semibold text-accent">${c.a}</div><div class="text-xs text-muted mt-1">Aegis-Governed</div></div>
-        <div><div class="text-2xl font-semibold text-slate-400">${c.b}</div><div class="text-xs text-muted mt-1">Ungoverned</div></div>
-      </div>
+      ${c.b === '—'
+        ? `<div class="text-2xl font-semibold text-accent">${c.a}</div><div class="text-xs text-muted mt-1">From real decision log</div>`
+        : `<div class="flex justify-center gap-10">
+            <div><div class="text-2xl font-semibold text-accent">${c.a}</div><div class="text-xs text-muted mt-1">Aegis-Governed</div></div>
+            <div><div class="text-2xl font-semibold text-slate-400">${c.b}</div><div class="text-xs text-muted mt-1">Ungoverned</div></div>
+          </div>`
+      }
     </div>
   `).join('');
 }
