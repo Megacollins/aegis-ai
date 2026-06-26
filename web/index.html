@@ -342,6 +342,15 @@ Risk Allocation      (volatility-scaled stop-loss / take-profit)
         ▼
 Paper Trading Execution  →  Trade Logger (CSV)  →  Feedback Loop</pre>
     </div>
+
+    <p class="text-sm text-muted mt-10 mb-3">No setup theater — clone it and it runs on mocks out of the box. This is real captured output, not a mockup:</p>
+    <div class="rounded-xl border border-border bg-panel2 p-5 font-mono text-sm">
+      <div class="text-accent mb-1">$ pip install -r requirements.txt</div>
+      <div class="text-accent mb-3">$ python scripts/run_aegis.py --iterations 20</div>
+      <div class="text-muted">Final balance: 10329.79 (start: 10000.00)</div>
+      <div class="text-muted">Feedback loop: no thresholds breached, no adjustments applied.</div>
+    </div>
+
     <div class="flex flex-wrap gap-4 mt-10">
       <a href="https://github.com/Megacollins/aegis-ai" target="_blank" class="px-6 py-3 rounded-lg bg-accent text-white font-medium hover:bg-blue-500 transition">View Source on GitHub</a>
       <a href="https://github.com/Megacollins/aegis-ai/blob/master/docs/architecture.md" target="_blank" class="px-6 py-3 rounded-lg border border-border text-slate-200 font-medium hover:border-accent transition">Architecture Docs</a>
