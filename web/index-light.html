@@ -267,6 +267,9 @@
       Aegis trades less and accepts a lower raw return in exchange for materially better risk-adjusted performance.
     </p>
 
+    <p class="text-xs uppercase tracking-widest text-muted mb-4">Real governance decisions, tallied from the decision log below</p>
+    <div class="grid sm:grid-cols-3 gap-5 mb-10" id="scoreboard"></div>
+
     <div class="grid md:grid-cols-5 gap-5 mb-10" id="metric-cards"></div>
 
     <div class="rounded-xl border border-border bg-panel p-6 mb-10 shadow-sm">
@@ -381,11 +384,29 @@ async function load() {
     fetch('data/trades.json').then(r => r.json()),
   ]);
   renderHeroStats(cmp);
+  renderScoreboard(trades);
   renderMetrics(cmp, trades);
   renderChart(cmp);
   renderTable(trades);
   renderVerifyRows(trades);
   renderReadinessChecklist();
+}
+
+function renderScoreboard(trades) {
+  const counts = { TRADE: 0, REDUCE: 0, PAUSE: 0 };
+  trades.forEach(t => { if (counts[t.stance] !== undefined) counts[t.stance]++; });
+  const cards = [
+    { label: 'TRADE', count: counts.TRADE, color: 'text-emerald-600', desc: 'Deployed at full or default risk budget' },
+    { label: 'REDUCE', count: counts.REDUCE, color: 'text-amber-600', desc: 'Risk budget and position cap cut on low confidence or losing streak' },
+    { label: 'PAUSE', count: counts.PAUSE, color: 'text-red-600', desc: 'Refused to trade — regime untrusted or drawdown breached' },
+  ];
+  document.getElementById('scoreboard').innerHTML = cards.map(c => `
+    <div class="rounded-xl border border-border bg-panel2 p-6 text-center shadow-sm">
+      <div class="text-5xl font-bold ${c.color} mb-2">${c.count}</div>
+      <div class="text-sm font-semibold text-ink tracking-widest mb-2">${c.label}</div>
+      <div class="text-xs text-muted">${c.desc}</div>
+    </div>
+  `).join('');
 }
 
 function computeWinStats(trades) {
